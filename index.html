@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Caption Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-indigo-900 min-h-screen p-4">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8 pt-6">
+            <h1 class="text-4xl font-bold text-white mb-2">🎯 Prediksi Caption Generator</h1>
+            <p class="text-purple-200">Generate caption prediksi otomatis dengan 1 klik</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <!-- Shift Selection -->
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Pilih Shift</label>
+                <div class="flex gap-4">
+                    <button onclick="setShift('pagi')" id="btn-pagi" class="flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 bg-blue-500 text-white hover:bg-blue-600">
+                        🌅 PAGI
+                    </button>
+                    <button onclick="setShift('malam')" id="btn-malam" class="flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 bg-gray-300 text-gray-600 hover:bg-gray-400">
+                        🌙 MALAM
+                    </button>
+                </div>
+            </div>
+
+            <!-- Time Selection -->
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Pilih Jam</label>
+                <select id="jamSelect" onchange="generateCaption()" class="w-full py-3 px-4 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 font-semibold">
+                    <option value="">-- Pilih Jam --</option>
+                </select>
+            </div>
+
+            <!-- Customize Message -->
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Customize Pesan Akhir (Optional)</label>
+                <textarea id="customMessage" placeholder="Biarkan kosong untuk template default: SALAM JACKPOT & TETAP UPS BOSSKU !!! - 🥰" class="w-full py-3 px-4 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 resize-none" rows="2"></textarea>
+            </div>
+
+            <!-- Generated Caption Preview -->
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Preview Caption</label>
+                <div id="captionPreview" class="w-full py-4 px-4 bg-gray-100 rounded-lg border-2 border-gray-300 min-h-[200px] max-h-[400px] overflow-y-auto whitespace-pre-wrap text-sm font-mono text-gray-800">
+                    Pilih jam untuk melihat preview caption
+                </div>
+            </div>
+
+            <!-- Copy Button -->
+            <button onclick="copyCaption()" class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-lg rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                📋 COPY CAPTION
+            </button>
+        </div>
+
+        <!-- Info -->
+        <div class="mt-6 text-center text-purple-200 text-sm">
+            <p>Caption akan langsung tercopy ke clipboard Anda</p>
+            <p class="mt-1">Siap untuk dikirim ke WA dan Telegram 📱</p>
+        </div>
+    </div>
+
+    <script>
+        // Data Jadwal Prediksi
+        const jadwalPagi = {
+            '13.00': ['KOWLOON', 'SINGAPORE', 'JEJULOTTO', 'TOTOBEIJING', 'TTM 4D P3'],
+            '15.00': ['TOTOFUZHOU', 'CYPRUS', 'TAIWAN', 'TAICHUNG', 'MEXICO', 'TTM 5D P2'],
+            '17.00': ['ICELAND', 'OSLO', 'TTM 4D P4', 'BHUTAN', 'HAITI', 'HONGKONG'],
+            '18.00': ['TTM 4D P5', 'KINGKONG P2', 'DENVER', 'TORONTO', 'TTM 4D P6']
+        };
+
+        const jadwalMalam = {
+            '23.30': ['MADRID', 'OREGON 03', 'BULGARIA', 'HUNGARY', 'MIAMI'],
+            '03.00': ['OREGON 06', 'CALIFORNIA', 'FLORIDA EVE', 'OREGON 09', 'NEWYORK EVE'],
+            '06.00': ['KENTUCKY EVE', 'CAROLINA EVE', 'ECUADOR', 'AUSTRIA', 'CAMBODIA', 'FOSHAN'],
+            '07.30': ['OREGON 12', 'BULLSEYE', 'CHILE', 'LAOS', 'TTM 4D P1'],
+            '08.00': ['SYDNEY', 'CHENGDU', 'GUANGDONG', 'TTM 5D P1', 'CHINA'],
+            '09.00': ['CHONGQING', 'TTM 4D P2', 'PHILIPPINES', 'KING KONG P1', 'JAPAN']
+        };
+
+        let currentShift = 'pagi';
+        let currentJam = '';
+        let currentCaption = '';
+
+        // Inisialisasi
+        function setShift(shift) {
+            currentShift = shift;
+            document.getElementById('btn-pagi').classList.toggle('bg-blue-500', shift === 'pagi');
+            document.getElementById('btn-pagi').classList.toggle('text-white', shift === 'pagi');
+            document.getElementById('btn-pagi').classList.toggle('bg-gray-300', shift !== 'pagi');
+            document.getElementById('btn-pagi').classList.toggle('text-gray-600', shift !== 'pagi');
+
+            document.getElementById('btn-malam').classList.toggle('bg-blue-500', shift === 'malam');
+            document.getElementById('btn-malam').classList.toggle('text-white', shift === 'malam');
+            document.getElementById('btn-malam').classList.toggle('bg-gray-300', shift !== 'malam');
+            document.getElementById('btn-malam').classList.toggle('text-gray-600', shift !== 'malam');
+
+            updateJamSelect();
+        }
+
+        // Update pilihan jam berdasarkan shift
+        function updateJamSelect() {
+            const jamSelect = document.getElementById('jamSelect');
+            jamSelect.innerHTML = '<option value="">-- Pilih Jam --</option>';
+
+            const jadwal = currentShift === 'pagi' ? jadwalPagi : jadwalMalam;
+            Object.keys(jadwal).forEach(jam => {
+                const option = document.createElement('option');
+                option.value = jam;
+                option.textContent = jam;
+                jamSelect.appendChild(option);
+            });
+
+            currentJam = '';
+            currentCaption = '';
+            document.getElementById('captionPreview').textContent = 'Pilih jam untuk melihat preview caption';
+        }
+
+        // Generate Caption
+        function generateCaption() {
+            currentJam = document.getElementById('jamSelect').value;
+            if (!currentJam) {
+                document.getElementById('captionPreview').textContent = 'Pilih jam untuk melihat preview caption';
+                return;
+            }
+
+            const jadwal = currentShift === 'pagi' ? jadwalPagi : jadwalMalam;
+            const pasaran = jadwal[currentJam];
+
+            // Get tanggal otomatis
+            const today = new Date();
+            const tanggal = formatTanggal(today);
+
+            // Build caption
+            let caption = '♣️♥️ PREDIKSI KARTUTOTO RUMUSAN MASTER MBAH PETRUK HARI INI\n\n';
+            caption += `${tanggal}\n\n`;
+            caption += pasaran.join('\n');
+            caption += '\n\n';
+
+            const customMsg = document.getElementById('customMessage').value.trim();
+            caption += customMsg || 'SALAM JACKPOT & TETAP UPS BOSSKU !!! - 🥰';
+
+            currentCaption = caption;
+            document.getElementById('captionPreview').textContent = caption;
+        }
+
+        // Format Tanggal
+        function formatTanggal(date) {
+            const days = ['MINGGU', 'SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU'];
+            const months = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+
+            return `${day} ${month} ${year}`;
+        }
+
+        // Copy to Clipboard
+        function copyCaption() {
+            if (!currentCaption) {
+                return;
+            }
+
+            navigator.clipboard.writeText(currentCaption).then(() => {
+                // Silent copy - no notification
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Set default shift saat load
+        window.addEventListener('load', () => {
+            setShift('pagi');
+        });
+    </script>
+</body>
+</html>
