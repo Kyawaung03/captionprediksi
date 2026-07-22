@@ -94,13 +94,16 @@
             box-shadow: 0 0 20px rgba(234, 208, 105, 0.2); background: rgba(0, 0, 0, 0.7);
         }
         .luxury-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        
+        /* PERBAIKAN: Menambahkan white-space: pre-wrap agar line break (\n) terbaca dengan baik */
         .preview-box {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(10, 10, 10, 0.4) 100%);
             border: 2px solid rgba(234, 208, 105, 0.2); backdrop-filter: blur(10px);
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5); color: #E0E0E0; overflow-y: auto;
             padding: 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; line-height: 1.5;
-            max-height: 200px; white-space: pre-wrap; word-wrap: break-word;
+            max-height: 250px; white-space: pre-wrap; word-wrap: break-word;
         }
+        
         .logo-container { animation: float 3s ease-in-out infinite; margin-bottom: 0.5rem; }
         .logo-img {
             max-width: 100%; height: auto; width: auto; max-height: 100px;
@@ -134,7 +137,7 @@
                 
                 <!-- Logo Section -->
                 <div class="logo-container text-center">
-                    <!-- PERBAIKAN 1: Nama file logo tanpa spasi agar aman di semua server -->
+                    <!-- PERBAIKAN: Nama file tanpa spasi agar kompatibel dengan semua server -->
                     <img src="logo-kartutoto.png" alt="KARTUTOTO" class="logo-img mx-auto">
                 </div>
 
@@ -178,7 +181,7 @@
                     <!-- Customize Message -->
                     <div class="space-section">
                         <label class="luxury-label">✏️ Pesan Akhir</label>
-                        <!-- PERBAIKAN 2: Menambahkan oninput agar preview update saat mengetik -->
+                        <!-- PERBAIKAN: Menambahkan oninput agar preview update secara real-time saat mengetik -->
                         <textarea id="customMessage" oninput="generateCaption()" placeholder="Default: SALAM JACKPOT & TETAP UPS BOSSKU !!! - 🥰" class="luxury-input resize-none" rows="1" style="min-height: 40px;"></textarea>
                     </div>
 
@@ -208,19 +211,17 @@
     </div>
 
     <script>
-        // PERBAIKAN 3: Data jadwal sudah disesuaikan.
-        // Jam 20.00 dan 21.00 dipindahkan ke jadwalPagi.
-        // Nama pasaran sudah menggunakan font Mathematical Bold sesuai permintaan.
+        // PERBAIKAN: Data jadwal lengkap dengan format Mathematical Bold sesuai permintaan
         const jadwalPagi = {
             '13.00': ['𝐊𝐎𝐖𝐋𝐎𝐎𝐍', '𝐒𝐈𝐍𝐆𝐀𝐏𝐎𝐑𝐄', '𝐉𝐄𝐉𝐔𝐋𝐎𝐓𝐓𝐎', '𝐓𝐎𝐓𝐎𝐁𝐄𝐈𝐉𝐈𝐍𝐆', '𝐓𝐓𝐌 𝟒𝐃 𝐏𝟑'],
             '15.00': ['𝐓𝐎𝐓𝐎𝐅𝐔𝐙𝐇𝐎𝐔', '𝐂𝐘𝐏𝐑𝐔𝐒', '𝐓𝐀𝐈𝐖𝐀𝐍', '𝐓𝐀𝐈𝐂𝐇𝐔𝐍𝐆', '𝐌𝐄𝐗𝐈𝐂𝐎', '𝐓𝐓𝐌 𝟓𝐃 𝐏𝟐'],
             '17.00': ['𝐈𝐂𝐄𝐋𝐀𝐍𝐃', '𝐎𝐒𝐋𝐎', '𝐓𝐓𝐌 𝟒𝐃 𝐏𝟒', '𝐁𝐇𝐔𝐓𝐀𝐍', '𝐇𝐀𝐈𝐓𝐈', '𝐇𝐎𝐍𝐆𝐊𝐎𝐍𝐆'],
-            '18.00': ['𝐓𝐓𝐌 𝟒𝐃 𝐏𝟓', '𝐊𝐈𝐍𝐆𝐊𝐎𝐍𝐆 𝐏𝟐', '𝐃𝐄𝐍𝐕𝐄𝐑', '𝐓𝐎𝐑𝐎𝐍𝐓𝐎', '𝐓𝐓𝐌 𝟒𝐃 𝐏𝟔'],
-            '20.00': ['𝐊𝐄𝐍𝐓𝐔𝐂𝐊𝐘 𝐌𝐈𝐃', '𝐑𝐎𝐌𝐀', '𝐅𝐋𝐎𝐑𝐈𝐃𝐀 𝐌𝐈𝐃', '𝐌𝐎𝐍𝐀𝐂𝐎', '𝐍𝐄𝐖𝐘𝐎𝐑𝐊 𝐌𝐈𝐃'], // Dipindahkan ke Pagi
-            '21.00': ['𝐓𝐔𝐑𝐈𝐍', '𝐈𝐓𝐀𝐋𝐘', '𝐂𝐀𝐑𝐎𝐋𝐈𝐍𝐀 𝐃𝐀𝐘', '𝐂𝐔𝐁𝐀', '𝐅𝐑𝐀𝐍𝐂𝐄']          // Dipindahkan ke Pagi
+            '18.00': ['𝐓𝐓𝐌 𝟒𝐃 𝐏𝟓', '𝐊𝐈𝐍𝐆𝐊𝐎𝐍𝐆 𝐏𝟐', '𝐃𝐄𝐍𝐕𝐄𝐑', '𝐓𝐎𝐑𝐎𝐍𝐓𝐎', '𝐓𝐓𝐌 𝟒𝐃 𝐏𝟔']
         };
 
         const jadwalMalam = {
+            '20.00': ['𝐊𝐄𝐍𝐓𝐔𝐂𝐊𝐘 𝐌𝐈𝐃', '𝐑𝐎𝐌𝐀', '𝐅𝐋𝐎𝐑𝐈𝐃𝐀 𝐌𝐈𝐃', '𝐌𝐎𝐍𝐀𝐂𝐎', '𝐍𝐄𝐖𝐘𝐎𝐑𝐊 𝐌𝐈𝐃'],
+            '21.00': ['𝐓𝐔𝐑𝐈𝐍', '𝐈𝐓𝐀𝐋𝐘', '𝐂𝐀𝐑𝐎𝐋𝐈𝐍𝐀 𝐃𝐀𝐘', '𝐂𝐔𝐁𝐀', '𝐅𝐑𝐀𝐍𝐂𝐄'],
             '23.30': ['𝐌𝐀𝐃𝐑𝐈𝐃', '𝐎𝐑𝐄𝐆𝐎𝐍 𝟎𝟑', '𝐁𝐔𝐋𝐆𝐀𝐑𝐈𝐀', '𝐇𝐔𝐍𝐆𝐀𝐑𝐘', '𝐌𝐈𝐀𝐌𝐈'],
             '03.00': ['𝐎𝐑𝐄𝐆𝐎𝐍 𝟎𝟔', '𝐂𝐀𝐋𝐈𝐅𝐎𝐑𝐍𝐈𝐀', '𝐅𝐋𝐎𝐑𝐈𝐃𝐀 𝐄𝐕𝐄', '𝐎𝐑𝐄𝐆𝐎𝐍 𝟎𝟗', '𝐍𝐄𝐖𝐘𝐎𝐑𝐊 𝐄𝐕𝐄'],
             '06.00': ['𝐊𝐄𝐍𝐓𝐔𝐂𝐊𝐘 𝐄𝐕𝐄', '𝐂𝐀𝐑𝐎𝐋𝐈𝐍𝐀 𝐄𝐕𝐄', '𝐄𝐂𝐔𝐀𝐃𝐎𝐑', '𝐀𝐔𝐒𝐓𝐑𝐈𝐀', '𝐂𝐀𝐌𝐁𝐎𝐃𝐈𝐀', '𝐅𝐎𝐒𝐇𝐀𝐍'],
@@ -277,10 +278,9 @@
             currentJam = '';
             currentCaption = '';
             document.getElementById('captionPreview').textContent = 'Pilih jam untuk preview';
-            document.getElementById('customMessage').value = ''; // Reset pesan saat ganti shift
         }
 
-        // PERBAIKAN 4: Logika Tanggal Cerdas
+        // PERBAIKAN UTAMA: Logika Tanggal Cerdas Berbasis Jam
         function generateCaption() {
             currentJam = document.getElementById('jamSelect').value;
             if (!currentJam) {
@@ -288,13 +288,13 @@
                 return;
             }
 
-            // Gabungkan jadwal untuk memudahkan pencarian data berdasarkan jam
+            // Gabungkan semua jadwal agar pencarian data lebih aman, tidak peduli tab shift mana yang aktif
             const allJadwal = { ...jadwalPagi, ...jadwalMalam };
             const pasaran = allJadwal[currentJam];
 
             let tanggalDate = new Date();
             
-            // Daftar jam yang tanggal caption-nya adalah "BESOK" (termasuk 20.00, 21.00 yang dipindah, dan semua shift malam)
+            // Daftar jam yang aturan bisnisnya menggunakan tanggal "BESOK" (+1 hari)
             const tomorrowTimes = ['20.00', '21.00', '23.30', '03.00', '06.00', '07.30', '08.00', '09.00'];
             
             if (tomorrowTimes.includes(currentJam)) {
@@ -319,7 +319,7 @@
             return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
         }
 
-        // PERBAIKAN 5: Feedback Visual saat Copy
+        // PERBAIKAN: Feedback Visual saat Copy
         function copyCaption() {
             if (!currentCaption) {
                 alert("Silakan pilih jam terlebih dahulu!");
